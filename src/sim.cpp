@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
 
     //simlib3::DebugON();
     simlib3::SetOutput("output.txt");
+    simlib3::Init(0, result["M"].as<double>());
 
     std::vector<CitizenCar *> cars;
     for (int c = 0; c < 4; c++)
@@ -68,8 +69,14 @@ int main(int argc, char *argv[])
     }
     simlib3::Print("Generated %d cars.\n", cars.size());
 
-    simlib3::Init(0, result["M"].as<double>());
     simlib3::Run();
+    for(auto s : Arguments::stations)
+    {
+        for(auto p : s.places)
+        {
+            p.getTankQueue()->Output();
+        }
+    }
     simlib3::SIMLIB_statistics.Output();
 }
 

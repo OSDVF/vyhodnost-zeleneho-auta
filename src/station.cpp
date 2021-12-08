@@ -50,6 +50,14 @@ Station::Station(std::vector<int> placesCount)
              remainingElectric);
 }
 
+int globalPlaceCounter = 0;
+StationPlace::StationPlace(FuelType fuelType)
+{
+    this->fuelType = fuelType;
+    std::string name = std::string(typeid(fuelType).name())+" place # "+std::to_string(globalPlaceCounter++);
+    this->tankingQueue = new Facility(name.c_str());
+}
+
 simlib3::Facility* StationPlace::getTankQueue()
 {
     return tankingQueue;

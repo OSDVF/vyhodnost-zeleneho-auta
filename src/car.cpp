@@ -149,6 +149,6 @@ void TravellerCar::Behavior()
 void TravellerCarGenerator::Behavior()
 {
     (new TravellerCar(fuelType))->Activate();
-    Activate(Time + Exponential(period));
     Print("Traveller has arrived!\n");
+    Activate(Time + Exponential(period));
 }

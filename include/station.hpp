@@ -7,7 +7,7 @@ struct StationPlace
 public:
     FuelType fuelType;
 
-    StationPlace(FuelType fuelType) : fuelType(fuelType) {}
+    StationPlace(FuelType fuelType);
     simlib3::Facility* getTankQueue();
 private:
     simlib3::Facility* tankingQueue = nullptr;
