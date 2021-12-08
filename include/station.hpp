@@ -1,3 +1,4 @@
+#pragma once
 #include "simlib.h"
 #include "car.hpp"
 #include <vector>
@@ -7,9 +8,9 @@ public:
     FuelType fuelType;
 
     StationPlace(FuelType fuelType) : fuelType(fuelType) {}
-
+    simlib3::Facility* getTankQueue();
 private:
-    simlib3::Facility* place;
+    simlib3::Facility* tankingQueue = nullptr;
 };
 
 class Station

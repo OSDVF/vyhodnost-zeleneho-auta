@@ -19,45 +19,42 @@ int main(int argc, char *argv[])
         {
 
         case str2intHash("h"):
-            std::cout << setupArguments().help();
+            std::cout << Arguments::setupArguments().help();
         }
     }
 
-    auto result = setupArguments().parse(argc, argv);
-    controlLight = result["K"].as<double>() / 100.0f;
-    dayMinutesLength = result["H"].as<double>();
+    auto result = Arguments::setupArguments().parse(argc, argv);
+    Arguments::controlLightLevel = result["K"].as<double>() / 100.0f;
+    Arguments::dayMinutesLength = result["H"].as<double>();
+    Arguments::kilometersToWork = result["V"].as<double>();
+    Arguments::kilometersToStation = result["B"].as<double>();
     auto workMinutes = result["R"].as<std::vector<double>>();
-    workMinutesMean = workMinutes[0];
-    workMinutesDispersion = workMinutes[1];
-    stationFill = result["D"].as<double>();
+    Arguments::workMinutesMean = workMinutes[0];
+    Arguments::workMinutesDispersion = workMinutes[1];
+    Arguments::stationFill = result["D"].as<double>();
+    Arguments::tankingTimes = result["T"].as<std::vector<double>>();
 
     std::size_t totalStationCount = result["P"].as<int>();
     auto individialPlacesCount = result["Z"].as<std::vector<int>>();
-    std::vector<Station> stations;
     for (std::size_t i = 0; i < totalStationCount; i++)
     {
-        stations.push_back(Station(individialPlacesCount));
+        Arguments::stations.push_back(Station(individialPlacesCount));
     }
 
     auto carsCount = result["A"].as<std::vector<int>>();
     auto tankSizes = result["N"].as<std::vector<double>>();
-    const FuelType intToType[] = {
-        FuelType::Petrol,
-        FuelType::Diesel,
-        FuelType::Electric,
-        FuelType::Hydrogen};
 
     //simlib3::DebugON();
     simlib3::SetOutput("output.txt");
-    
+
     std::vector<CitizenCar *> cars;
     for (int c = 0; c < 4; c++)
     {
         for (int i = 0; i < carsCount[c]; i++)
         {
             double tankSize = simlib3::Normal(tankSizes[c * 2], tankSizes[c * 2 + 1]);
-            double generatedFuel = simlib3::Uniform(controlLight * tankSize, tankSize);
-            cars.push_back(new CitizenCar(generatedFuel, tankSize, intToType[c]));
+            double generatedFuel = simlib3::Uniform(Arguments::controlLightLevel * tankSize, tankSize);
+            cars.push_back(new CitizenCar(generatedFuel, tankSize, intToFuelType[c]));
         }
     }
 

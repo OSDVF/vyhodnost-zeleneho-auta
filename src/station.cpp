@@ -49,3 +49,8 @@ Station::Station(std::vector<int> placesCount)
              remainingDiesel |
              remainingElectric);
 }
+
+simlib3::Facility* StationPlace::getTankQueue()
+{
+    return tankingQueue;
+}

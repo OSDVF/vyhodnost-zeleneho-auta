@@ -14,6 +14,13 @@ inline FuelType operator|(FuelType a, FuelType b)
     return static_cast<FuelType>(static_cast<int>(a) | static_cast<int>(b));
 }
 
+inline int operator&(FuelType a, FuelType b)
+{
+    return (static_cast<int>(a) | static_cast<int>(b));
+}
+
+void GoToStation(simlib3::Process *car, FuelType fuelTypes);
+
 class CitizenCar : public simlib3::Process
 {
 public:
@@ -28,6 +35,8 @@ public:
         : fuel(fuel), tankSize(tankSize), fuelTypes(fuelTypes) {}
 
     void Behavior();
+    void MaybeGoToStation();
+    void Travel(double time, double distance);
 };
 
 class TravellerCar : public simlib3::Process
