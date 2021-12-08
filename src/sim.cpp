@@ -56,7 +56,8 @@ int main(int argc, char *argv[])
         {
             double tankSize = simlib3::Normal(tankSizes[c * 2], tankSizes[c * 2 + 1]);
             double generatedFuel = simlib3::Uniform(Arguments::controlLightLevel * tankSize, tankSize);
-            auto newCar = new CitizenCar(generatedFuel, tankSize, intToFuelType[c]);
+            auto newCar = new CitizenCar();
+            newCar->Create(generatedFuel, tankSize, intToFuelType[c]);
             cars.push_back(newCar);
             newCar->Activate();
         }
@@ -65,7 +66,9 @@ int main(int argc, char *argv[])
     auto tripPeriods = result["Y"].as<std::vector<double>>();
     for (int i = 0; i < 4; i++)
     {
-        (new TravellerCarGenerator(intToFuelType[i], tripPeriods[i]))->Activate();
+        auto gen = new TravellerCarGenerator;
+        gen->Create(intToFuelType[i], tripPeriods[i]);
+        gen->Activate();
     }
     simlib3::Print("Generated %d cars.\n", cars.size());
 

@@ -24,15 +24,21 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes);
 class CitizenCar : public simlib3::Process
 {
 public:
+static int carSerialNumberCounter;
     //should be set at start
+    int carSerialNumber;
     double fuel;
     double tankSize;
     FuelType fuelTypes;
 
     //varying
     double _elapsedDayMinutes = 0;
-    CitizenCar(double fuel, double tankSize, FuelType fuelTypes)
-        : fuel(fuel), tankSize(tankSize), fuelTypes(fuelTypes) {}
+    void Create(double fuel, double tankSize, FuelType fuelTypes) {
+        this->carSerialNumber = carSerialNumberCounter++;
+        this->fuel = fuel;
+        this->tankSize = tankSize;
+        this->fuelTypes = fuelTypes;
+    }
 
     void Behavior();
     void MaybeGoToStation();
@@ -42,8 +48,12 @@ public:
 class TravellerCar : public simlib3::Process
 {
 public:
+    int number;
     FuelType fuelTypes;
-    TravellerCar(FuelType fuelTypes) : fuelTypes(fuelTypes) {}
+    void Create(FuelType fuelTypes) {
+        this->number = CitizenCar::carSerialNumberCounter++;
+        this->fuelTypes = fuelTypes;
+    }
     void Behavior();
 };
 
@@ -53,6 +63,9 @@ public:
     FuelType fuelType;
     double period;
 
-    TravellerCarGenerator(FuelType fuelType, double period) : fuelType(fuelType), period(period) {}
+    void Create(FuelType fuelType, double period){
+        this->fuelType = fuelType;
+        this->period = period;
+    }
     void Behavior();
 };
