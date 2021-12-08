@@ -10,10 +10,12 @@
             "request": "launch",
             "program": "${workspaceFolder}/debug/sim",
             "args": [
-                "--Pumpy=10,10,10,10",
+                "--Pumpy=40",
                 "--Zastavky=4,4,5,5",
                 "--Tankovani=2,2,20,1",
                 "--Auta=10000,10000,20000,5000",
+                //       0       1        2     3
+                //       0   1   2    3   4   5 6   7
                 "--Nadrz=482,50,1000,100,300,50,650,80",
                 "--Doplneni=4320",
                 "--Minuty=525600",//Rok,

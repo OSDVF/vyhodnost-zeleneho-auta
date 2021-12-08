@@ -11,7 +11,9 @@ cxxopts::Options setupArguments()
 {
     cxxopts::Options options("Výhodnost zeleného auta", "Pokud chce EU splnit green deal v roce 2050, kolik bude třeba čerpacích a nabíjecích stanic pro jednotlivá paliva a jak moc se různé paliva ekonomicky vyplatí pro konkrétního jednotlivce, aby byl splněn limit emisí o 55% menších, než v roce 1990");
         options.add_options("Povinné")
-            ("P,Pumpy", "Počet čerpacích stanic Benzín,Nafta,Elektro,Vodík", cxxopts::value<std::vector<int>>())
+            ("P,Pumpy", "Počet čerpacích stanic", cxxopts::value<int>())
+            ("V,Vzdalenost", "Vzdálenost do práce (km)", cxxopts::value<double>()->default_value("5"))
+            ("B,VzdalenostStanice", "Vzdálenost na stanici", cxxopts::value<double>()->default_value("5"))
             ("Z,Zastavky","Počet zastávek na jedné čerpací stanici (střední hodnota, rozptyl) Bs,Br,Ns,Nr,Es,Er,Vs,Vr", cxxopts::value<std::vector<int>>()->default_value("4,2,4,2,5,2,5,2"))
             ("T,Tankovani", "Doba tankování (min) plné nádrže jednotlivých paliv B,N,E,V", cxxopts::value<std::vector<double>>())
             ("A,Auta","Počet aut různého typu paliva B,N,E,V", cxxopts::value<std::vector<int>>())
