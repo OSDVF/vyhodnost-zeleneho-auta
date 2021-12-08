@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     Arguments::workMinutesDispersion = workMinutes[1];
     Arguments::stationFill = result["D"].as<double>();
     Arguments::tankingTimes = result["T"].as<std::vector<double>>();
+    Arguments::nightChargeProbability = result["C"].as<double>();
 
     std::size_t totalStationCount = result["P"].as<int>();
     auto individialPlacesCount = result["Z"].as<std::vector<int>>();
@@ -54,14 +55,15 @@ int main(int argc, char *argv[])
         {
             double tankSize = simlib3::Normal(tankSizes[c * 2], tankSizes[c * 2 + 1]);
             double generatedFuel = simlib3::Uniform(Arguments::controlLightLevel * tankSize, tankSize);
-            cars.push_back(new CitizenCar(generatedFuel, tankSize, intToFuelType[c]));
+            auto newCar = new CitizenCar(generatedFuel, tankSize, intToFuelType[c]);
+            cars.push_back(newCar);
+            newCar->Activate();
         }
     }
 
     simlib3::Print("Generated %d cars\n.", cars.size());
 
-    simlib3::Init(0, result["D"].as<double>());
-
+    simlib3::Init(0, result["M"].as<double>());
     simlib3::Run();
     simlib3::SIMLIB_statistics.Output();
 }

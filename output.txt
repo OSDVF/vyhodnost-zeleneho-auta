@@ -2,7 +2,7 @@ Generated 45000 cars
 .#
 # SIMLIB run-time statistics:
 #    StartTime  = 0
-#    EndTime    = 4320
+#    EndTime    = 525600
 #    EventCount = 0
 #    StepCount  = 0
 #

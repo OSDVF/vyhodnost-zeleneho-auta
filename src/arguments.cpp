@@ -6,6 +6,7 @@ double Arguments::workMinutesMean;
 double Arguments::workMinutesDispersion;
 double Arguments::stationFill;
 double Arguments::kilometersToWork;
+double Arguments::nightChargeProbability;
 double Arguments::kilometersToStation;
 std::vector<Station> Arguments::stations;
 std::vector<double> Arguments::tankingTimes;
@@ -24,6 +25,7 @@ cxxopts::Options Arguments::setupArguments()
         ("D,Doplneni","Perioda doplňování paliva na pumpách (střední hodnota)",cxxopts::value<double>()->default_value("480"))
         ("M,Minuty","Doba běhu simulace", cxxopts::value<double>());
     options.add_options("Volitelné")
+        ("C,Pravdepodobnost","Pravděpodobnost, že člověk dá svůj elektromobil nabít přes noc", cxxopts::value<double>()->default_value("0.9"))
         ("K,Kontrolka","Kdy se rozsvítí kontrolka, že by auto mělo jet tankovat (% zbylého paliva v nádrži)", cxxopts::value<double>()->default_value("10"))
         ("H,Den","Délka dne v minutách", cxxopts::value<double>()->default_value("1440"))
         ("R,Prace","pRacovní doba v minutách (střední hodnota, rozptyl)", cxxopts::value<std::vector<double>>()->default_value("480,60"));
