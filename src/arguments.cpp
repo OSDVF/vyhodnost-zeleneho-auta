@@ -23,6 +23,7 @@ cxxopts::Options Arguments::setupArguments()
         ("A,Auta","Počet aut různého typu paliva B,N,E,V", cxxopts::value<std::vector<int>>())
         ("N,Nadrz","Dojezd na jednu nádrž pro různé auta (střední hodnota, rozptyl) Bs,Br,Ns,Nr,Es,Er,Vs,Vr",cxxopts::value<std::vector<double>>())
         ("D,Doplneni","Perioda doplňování paliva na pumpách (střední hodnota)",cxxopts::value<double>()->default_value("480"))
+        ("Y,Vylet","Perioda generování výletníků pro auta různých typů B,N,E,V",cxxopts::value<std::vector<double>>())
         ("M,Minuty","Doba běhu simulace", cxxopts::value<double>());
     options.add_options("Volitelné")
         ("C,Pravdepodobnost","Pravděpodobnost, že člověk dá svůj elektromobil nabít přes noc", cxxopts::value<double>()->default_value("0.9"))
