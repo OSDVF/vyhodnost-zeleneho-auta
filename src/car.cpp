@@ -137,6 +137,6 @@ void TravellerCar::Behavior()
 
 void TravellerCarGenerator::Behavior()
 {
-    (new TravellerCar(intToFuelType[(int)simlib3::Uniform(0, 3)]))->Activate();
-    Activate(Time + Exponential(120));
+    (new TravellerCar(fuelType))->Activate();
+    Activate(Time + Exponential(period));
 }

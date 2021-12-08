@@ -61,7 +61,12 @@ int main(int argc, char *argv[])
         }
     }
 
-    simlib3::Print("Generated %d cars\n.", cars.size());
+    auto tripPeriods = result["Y"].as<std::vector<double>>();
+    for (int i = 0; i < 4; i++)
+    {
+        (new TravellerCarGenerator(intToFuelType[i], tripPeriods[i]))->Activate();
+    }
+    simlib3::Print("Generated %d cars.\n", cars.size());
 
     simlib3::Init(0, result["M"].as<double>());
     simlib3::Run();
