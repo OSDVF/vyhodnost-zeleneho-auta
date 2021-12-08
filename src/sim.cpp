@@ -20,6 +20,13 @@ int main(int argc, char *argv[])
             std::cout << setupArguments().help();
         }
     }
+
+    auto result = setupArguments().parse(argc, argv);
+    simlib3::DebugON();
+    simlib3::SetOutput("output.txt");
+
+    simlib3::Init(0, result["D"].as<double>());
+    
 }
 
 unsigned int stdStr2intHash(std::string str, int h)

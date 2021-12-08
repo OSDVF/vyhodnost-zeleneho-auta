@@ -10,6 +10,10 @@ cxxopts::Options setupArguments()
             ("N,Nadrz","Velikost nádrže od,do", cxxopts::value<std::vector<float>>()->default_value("45,60"))//https://www.rockethq.com/learn/personal-finances/how-much-does-it-cost-you-to-fill-up
             ("A,Auta","Počet aut různého typu paliva B,N,E,V", cxxopts::value<std::vector<int>>())
             ("S,Spotreba","Spotřeba paliva pro různé auta (střední hodnota, rozptyl) Bs,Br,Ns,Nr,Es,Er,Vs,Vr",cxxopts::value<std::vector<float>>())
-            ("D,Doplneni","Perioda doplňování paliva na pumpách (střední hodnota)",cxxopts::value<float>());
+            ("D,Doplneni","Perioda doplňování paliva na pumpách (střední hodnota)",cxxopts::value<float>())
+            ("M,Minuty","Doba běhu simulace", cxxopts::value<double>());
+        options.add_options("Volitelné")
+            ("H,Den","Délka dne v minutách", cxxopts::value<double>()->default_value("1440"))
+            ("R,Prace","pRacovní doba v minutách (střední hodnota, rozptyl)", cxxopts::value<std::vector<double>>()->default_value("480,60"));
         return options;
 }
