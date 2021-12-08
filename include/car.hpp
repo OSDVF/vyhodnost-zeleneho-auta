@@ -1,11 +1,12 @@
+#pragma once
 #include <simlib.h>
 
 enum class FuelType
 {
     Hydrogen = 1,
     Electric = 2,
-    Gasoline = 4,
-    Oil = 8
+    Petrol = 4,
+    Diesel = 8
 };
 
 inline FuelType operator|(FuelType a, FuelType b)
@@ -16,10 +17,13 @@ inline FuelType operator|(FuelType a, FuelType b)
 class Car : simlib3::Process
 {
 public:
+    //should be set at start
     double fuel;
     double tankSize;
     FuelType fuelTypes;
     double consumption;
 
+    //varying
+    double _elapsedDayMinutes = 0;
 
 };
