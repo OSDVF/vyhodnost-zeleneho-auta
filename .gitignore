@@ -1,0 +1,6 @@
+debug/
+build/
+*.o
+*.out-*
+simlib/examples
+simlib/doc
