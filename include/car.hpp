@@ -34,8 +34,7 @@ class TravellerCar : public simlib3::Process
 {
 public:
     FuelType fuelTypes;
-    double tankSize;
-    TravellerCar(FuelType fuelTypes, double tankSize) : fuelTypes(fuelTypes),tankSize(tankSize) {}
+    TravellerCar(FuelType fuelTypes) : fuelTypes(fuelTypes) {}
     void Behavior();
 };
 
