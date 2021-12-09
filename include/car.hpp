@@ -16,7 +16,7 @@ inline FuelType operator|(FuelType a, FuelType b)
 
 inline int operator&(FuelType a, FuelType b)
 {
-    return (static_cast<int>(a) | static_cast<int>(b));
+    return (static_cast<int>(a) & static_cast<int>(b));
 }
 
 void GoToStation(simlib3::Process *car, FuelType fuelTypes);
