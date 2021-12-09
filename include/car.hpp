@@ -30,10 +30,12 @@ static int carSerialNumberCounter;
     double fuel;
     double tankSize;
     FuelType fuelTypes;
+    int daysSinceLastRefuel;
 
     //varying
     double _elapsedDayMinutes = 0;
     void Create(double fuel, double tankSize, FuelType fuelTypes) {
+        this->daysSinceLastRefuel = 0;
         this->carSerialNumber = carSerialNumberCounter++;
         this->fuel = fuel;
         this->tankSize = tankSize;
