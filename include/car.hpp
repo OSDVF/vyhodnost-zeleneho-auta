@@ -34,13 +34,7 @@ static int carSerialNumberCounter;
 
     //varying
     double _elapsedDayMinutes = 0;
-    void Create(double fuel, double tankSize, FuelType fuelTypes) {
-        this->daysSinceLastRefuel = 0;
-        this->carSerialNumber = carSerialNumberCounter++;
-        this->fuel = fuel;
-        this->tankSize = tankSize;
-        this->fuelTypes = fuelTypes;
-    }
+    void Create(double fuel, double tankSize, FuelType fuelTypes);
 
     void Behavior();
     void MaybeGoToStation();
@@ -52,10 +46,7 @@ class TravellerCar : public simlib3::Process
 public:
     int number;
     FuelType fuelTypes;
-    void Create(FuelType fuelTypes) {
-        this->number = CitizenCar::carSerialNumberCounter++;
-        this->fuelTypes = fuelTypes;
-    }
+    void Create(FuelType fuelTypes);
     void Behavior();
 };
 

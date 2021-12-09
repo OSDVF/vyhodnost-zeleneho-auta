@@ -10,6 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/debug/sim",
             "args": [
+                "--Auta=875,175,612,122"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

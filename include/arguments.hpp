@@ -1,6 +1,11 @@
 #pragma once
 #include "cxxopts.hpp"
 #include "station.hpp"
+constexpr const char *intToFuelString[] = {
+    "Petrol",
+    "Diesel",
+    "Electric",
+    "Hydrogen"};
 
 constexpr FuelType intToFuelType[] = {
     FuelType::Petrol,
