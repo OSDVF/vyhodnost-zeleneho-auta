@@ -71,3 +71,19 @@ public:
     }
     void Behavior();
 };
+
+class Day : public simlib3::Process
+{
+public:
+    int dayNumber;
+    void Create(int dayCounter);
+    void Behavior();
+};
+
+class DayGenerator : public simlib3::Event
+{
+public:
+    int dayCounter;
+    void Create();
+    void Behavior();
+};

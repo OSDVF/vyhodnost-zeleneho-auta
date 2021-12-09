@@ -160,3 +160,27 @@ void TravellerCarGenerator::Behavior()
     Print("Traveller has arrived!\n");
     Activate(Time + Exponential(period));
 }
+
+void Day::Behavior()
+{
+    Print("^^^^^^^^^^^^^^^^^^^^^^^^^\n           Day %d        \n^^^^^^^^^^^^^^^^^^^^^^^^^\n", dayNumber);
+}
+
+void Day::Create(int dayCounter)
+{
+    dayNumber = dayCounter;
+}
+
+void DayGenerator::Behavior()
+{
+    auto day = new Day();
+    day->Create(dayCounter);
+    day->Activate();
+    dayCounter++;
+    Activate(Time + 1440);
+}
+
+void DayGenerator::Create()
+{
+    dayCounter = 0;
+}

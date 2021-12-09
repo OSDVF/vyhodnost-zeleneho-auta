@@ -72,6 +72,10 @@ int main(int argc, char *argv[])
     }
     simlib3::Print("Generated %d cars.\n", cars.size());
 
+    auto dayCounterGen = new DayGenerator;
+    dayCounterGen->Create();
+    dayCounterGen->Activate();
+
     simlib3::Run();
     for(auto s : Arguments::stations)
     {
