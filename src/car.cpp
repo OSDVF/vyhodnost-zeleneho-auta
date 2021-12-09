@@ -173,6 +173,7 @@ void TravellerCarGenerator::Behavior()
 void Day::Behavior()
 {
     Print("^^^^^^^^^^^^^^^^^^^^^^^^^\n           Day %d        \n^^^^^^^^^^^^^^^^^^^^^^^^^\n", dayNumber);
+    printf("Day %d\n", dayNumber);
 }
 
 void Day::Create(int dayCounter)
@@ -192,4 +193,16 @@ void DayGenerator::Behavior()
 void DayGenerator::Create()
 {
     dayCounter = 0;
+}
+
+void RefuelStation::Behavior()
+{
+    //
+}
+
+void RefuelTheStationGenerator::Behavior()
+{
+    auto refuel = new RefuelStation();
+    refuel->Activate();
+    Activate(Time + (1440*3));
 }

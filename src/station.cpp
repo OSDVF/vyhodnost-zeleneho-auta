@@ -7,6 +7,7 @@ void Station::addPlaces(std::vector<int> placesCount)
     {
         this->placesCount[i] += placesCount[i];
     }
+    isGettingRefueled = false;
     int remainingPetrol = placesCount[0];
     int remainingDiesel = placesCount[1];
 

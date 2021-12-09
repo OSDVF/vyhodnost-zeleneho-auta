@@ -78,3 +78,17 @@ public:
     void Create();
     void Behavior();
 };
+
+class RefuelStation : public simlib3::Process
+{
+public:
+    void Create();
+    void Behavior();
+};
+
+class RefuelTheStationGenerator : public simlib3::Event
+{
+public:
+    void Create();
+    void Behavior();
+};

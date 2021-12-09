@@ -18,6 +18,7 @@ class Station
     int number;
     int placesCount[4] = {0,0,0,0};
 public:
+    bool isGettingRefueled;
     std::vector<StationPlace> places;
 
     void addPlaces(std::vector<int> placesCount);
