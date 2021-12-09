@@ -52,7 +52,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                         if (potentialCitizenCar != nullptr)
                         {
                             auto time = Arguments::tankingTimes[fuelTypeToInt[potentialCitizenCar->fuelTypes]];
-                            Print("Citizen #%d is fueling up! It will take him %d minutes\n", potentialCitizenCar->carSerialNumber, time);
+                            Print("Citizen #%d is fueling up! It will take him %f minutes\n", potentialCitizenCar->carSerialNumber, time);
                             potentialCitizenCar->Wait(time);
                             potentialCitizenCar->_elapsedDayMinutes += time;
                             potentialCitizenCar->fuel = potentialCitizenCar->tankSize;
@@ -61,7 +61,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                         {
                             auto travellerCar = dynamic_cast<TravellerCar *>(car);
                             auto someTime = Arguments::tankingTimes[fuelTypeToInt[travellerCar->fuelTypes]];
-                            Print("Traveller #%d is fueling up! It will take him %d minutes\n", travellerCar->number, someTime);
+                            Print("Traveller #%d is fueling up! It will take him %f minutes\n", travellerCar->number, someTime);
                             travellerCar->Wait(someTime);
                         }
                         places[minFullPlaceIndex].getTankQueue()->Release(car);
@@ -74,7 +74,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                     if (potentialCitizenCar != nullptr)
                     {
                         auto time = Arguments::tankingTimes[fuelTypeToInt[potentialCitizenCar->fuelTypes]];
-                        Print("Citizen #%d is fueling up! It will take him %d minutes\n", potentialCitizenCar->carSerialNumber, time);
+                        Print("Citizen #%d is fueling up! It will take him %f minutes\n", potentialCitizenCar->carSerialNumber, time);
                         potentialCitizenCar->Wait(time);
                         potentialCitizenCar->_elapsedDayMinutes += time;
                         potentialCitizenCar->fuel = potentialCitizenCar->tankSize;
@@ -83,7 +83,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                     {
                         auto travellerCar = dynamic_cast<TravellerCar *>(car);
                         auto someTime = Arguments::tankingTimes[fuelTypeToInt[travellerCar->fuelTypes]];
-                        Print("Traveller %d is fueling up! It will take him %d minutes\n", travellerCar->number, someTime);
+                        Print("Traveller %d is fueling up! It will take him %f minutes\n", travellerCar->number, someTime);
                         travellerCar->Wait(someTime);
                     }
                     place.getTankQueue()->Release(car);
@@ -113,12 +113,12 @@ void CitizenCar::Behavior()
         Travel(randomTimeToWork / 2, Arguments::kilometersToWork / 2);
         // Now decide if we want to tank
         MaybeGoToStation();
-        Print("Citizen #%d is going to work! It will take him: %d minutes\n", carSerialNumber, randomTimeToWork / 2);
+        Print("Citizen #%d is going to work! It will take him: %f minutes\n", carSerialNumber, randomTimeToWork / 2);
         Travel(randomTimeToWork / 2, Arguments::kilometersToWork / 2);
 
         //Works
         double workTime = simlib3::Normal(Arguments::workMinutesMean, Arguments::workMinutesDispersion);
-        Print("Citizen #%d is working! It will take him %d minutes\n", carSerialNumber, workTime);
+        Print("Citizen #%d is working! It will take him %f minutes\n", carSerialNumber, workTime);
         Wait(workTime);
         this->_elapsedDayMinutes += workTime;
 
@@ -127,7 +127,7 @@ void CitizenCar::Behavior()
         Travel(randomTimeToWork / 2, Arguments::kilometersToWork / 2);
         // Now decide if we want to tank
         MaybeGoToStation();
-        Print("Citizen #%d is going home! It will take him %d minutes\n", carSerialNumber, randomTimeToWork / 2);
+        Print("Citizen #%d is going home! It will take him %f minutes\n", carSerialNumber, randomTimeToWork / 2);
         Travel(randomTimeToWork / 2, Arguments::kilometersToWork / 2);
 
         if (this->fuelTypes & FuelType::Electric && simlib3::Uniform(0, 1) < Arguments::nightChargeProbability)
