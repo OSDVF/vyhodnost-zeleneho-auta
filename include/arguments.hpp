@@ -24,6 +24,7 @@ public:
     static double kilometersToWork;
     static double kilometersToStation;
     static double nightChargeProbability;
+    static double stupidity;
     static std::vector<Station> stations;
     static std::vector<double> tankingTimes;
 

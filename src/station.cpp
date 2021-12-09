@@ -1,6 +1,6 @@
 #include "station.hpp"
 
-Station::Station(std::vector<int> placesCount)
+void Station::addPlaces(std::vector<int> placesCount)
 {
     int remainingPetrol = placesCount[0];
     int remainingDiesel = placesCount[1];

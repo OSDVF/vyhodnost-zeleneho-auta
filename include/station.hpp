@@ -18,6 +18,6 @@ class Station
 public:
     std::vector<StationPlace> places;
 
-    Station(std::vector<int> placesCount);
+    void addPlaces(std::vector<int> placesCount);
     Station() {}
 };

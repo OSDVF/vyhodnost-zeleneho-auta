@@ -34,12 +34,32 @@ int main(int argc, char *argv[])
     Arguments::stationFill = result["D"].as<double>();
     Arguments::tankingTimes = result["T"].as<std::vector<double>>();
     Arguments::nightChargeProbability = result["C"].as<double>();
+    Arguments::stupidity = result["L"].as<decltype(Arguments::stupidity)>();
 
     std::size_t totalStationCount = result["P"].as<int>();
     auto individialPlacesCount = result["Z"].as<std::vector<int>>();
-    for (std::size_t i = 0; i < totalStationCount; i++)
+    int totalPlacesCount = 0;
+    Arguments::stations = std::vector<Station>(totalStationCount);
+    for(auto p : individialPlacesCount)
     {
-        Arguments::stations.push_back(Station(individialPlacesCount));
+        totalPlacesCount+= p;
+    }
+
+    // Like card giving process (each station gets max one on each station type)
+    int currentStation = 0;
+    while (totalPlacesCount>0)
+    {
+        std::vector<int> currentCount = {0,0,0,0};
+        for(int i = 0;i<4;i++)
+        {
+            if(individialPlacesCount[i]>0)
+            {
+                currentCount[i]++;
+                individialPlacesCount[i]--;
+                totalPlacesCount--;
+            }
+        }
+        Arguments::stations[currentStation++ % totalStationCount].addPlaces(currentCount);
     }
 
     auto carsCount = result["A"].as<std::vector<int>>();
