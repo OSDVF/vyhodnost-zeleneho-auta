@@ -104,6 +104,13 @@ int main(int argc, char *argv[])
     dayCounterGen->Create();
     dayCounterGen->Activate();
 
+    for (auto s : Arguments::stations)
+    {
+        auto refillGen = new RefuelTheStationGenerator;
+        refillGen->Create(s);
+        refillGen->Activate();
+    }
+
     simlib3::Run();
     for (auto s : Arguments::stations)
     {

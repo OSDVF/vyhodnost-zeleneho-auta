@@ -15,9 +15,9 @@ private:
 
 class Station
 {
-    int number;
     int placesCount[4] = {0,0,0,0};
 public:
+    int number;
     bool isGettingRefueled;
     std::vector<StationPlace> places;
 

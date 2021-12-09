@@ -1,5 +1,6 @@
 #pragma once
 #include <simlib.h>
+#include "station.hpp"
 
 enum class FuelType
 {
@@ -82,13 +83,15 @@ public:
 class RefuelStation : public simlib3::Process
 {
 public:
-    void Create();
+    Station stationToRefuel;
+    void Create(Station station);
     void Behavior();
 };
 
 class RefuelTheStationGenerator : public simlib3::Event
 {
 public:
-    void Create();
+    Station stationToRefuel;
+    void Create(Station station);
     void Behavior();
 };
