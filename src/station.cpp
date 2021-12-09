@@ -106,6 +106,7 @@ void RefuelStation::Behavior()
         if(p.fuelType != FuelType::Electric)
             p.getTankQueue()->Release(this);
     }
+    stationToRefuel.isGettingRefueled = false;
 }
 
 void RefuelTheStationGenerator::Create(Station station)
