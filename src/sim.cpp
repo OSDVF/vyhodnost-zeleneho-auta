@@ -35,38 +35,46 @@ int main(int argc, char *argv[])
     Arguments::tankingTimes = result["T"].as<std::vector<double>>();
     Arguments::nightChargeProbability = result["C"].as<double>();
     Arguments::stupidity = result["L"].as<decltype(Arguments::stupidity)>();
+    Arguments::fuelTypeToInt = std::unordered_map<FuelType, int>({{FuelType::Petrol, 0},
+                                                                  {FuelType::Diesel, 1},
+                                                                  {FuelType::Electric, 2},
+                                                                  {FuelType::Hydrogen, 3}});
 
-    std::size_t totalStationCount = result["P"].as<int>();
+    int totalStationCount = result["P"].as<int>();
     auto individialPlacesCount = result["Z"].as<std::vector<int>>();
     int totalPlacesCount = 0;
     Arguments::stations = std::vector<Station>(totalStationCount);
-    for(auto p : individialPlacesCount)
+    for (auto p : individialPlacesCount)
     {
-        totalPlacesCount+= p;
+        totalPlacesCount += p;
     }
 
     // Like card giving process (each station gets max one on each station type)
     int currentStation = 0;
-    while (totalPlacesCount>0)
+    int notYetGivenPlaces = totalPlacesCount;
+    while (notYetGivenPlaces > 0)
     {
-        std::vector<int> currentCount = {0,0,0,0};
-        for(int i = 0;i<4;i++)
+        std::vector<int> currentCount = {0, 0, 0, 0};
+        for (int i = 0; i < 4; i++)
         {
-            if(individialPlacesCount[i]>0)
+            if (individialPlacesCount[i] > 0)
             {
                 currentCount[i]++;
                 individialPlacesCount[i]--;
-                totalPlacesCount--;
+                notYetGivenPlaces--;
             }
         }
         Arguments::stations[currentStation++ % totalStationCount].addPlaces(currentCount);
+    }
+    for (int i = 0; i < totalStationCount; i++)
+    {
+        Arguments::stations[i].printPlacesInfo();
     }
 
     auto carsCount = result["A"].as<std::vector<int>>();
     auto tankSizes = result["N"].as<std::vector<double>>();
 
     //simlib3::DebugON();
-    simlib3::SetOutput("output.txt");
     simlib3::Init(0, result["M"].as<double>());
 
     std::vector<CitizenCar *> cars;
@@ -97,9 +105,9 @@ int main(int argc, char *argv[])
     dayCounterGen->Activate();
 
     simlib3::Run();
-    for(auto s : Arguments::stations)
+    for (auto s : Arguments::stations)
     {
-        for(auto p : s.places)
+        for (auto p : s.places)
         {
             p.getTankQueue()->Output();
         }

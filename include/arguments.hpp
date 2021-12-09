@@ -27,6 +27,7 @@ public:
     static double stupidity;
     static std::vector<Station> stations;
     static std::vector<double> tankingTimes;
+    static std::unordered_map<FuelType, int> fuelTypeToInt;
 
     static cxxopts::Options setupArguments();
 };

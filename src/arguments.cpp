@@ -11,6 +11,7 @@ double Arguments::kilometersToStation;
 double Arguments::stupidity;
 std::vector<Station> Arguments::stations;
 std::vector<double> Arguments::tankingTimes;
+std::unordered_map<FuelType, int> Arguments::fuelTypeToInt;
 
 cxxopts::Options Arguments::setupArguments()
 {
@@ -19,7 +20,7 @@ cxxopts::Options Arguments::setupArguments()
         ("P,Pumpy", "Počet čerpacích stanic", cxxopts::value<int>()->default_value("68"))
         ("V,Vzdalenost", "Vzdálenost do práce (km)", cxxopts::value<double>()->default_value("20"))
         ("B,VzdalenostStanice", "Vzdálenost na stanici", cxxopts::value<double>()->default_value("20"))
-        ("Z,Zastavky","Celkový počet na všech stanicích B,N,E,V", cxxopts::value<std::vector<int>>()->default_value("136,136,230,50"))
+        ("Z,Zastavky","Celkový počet na všech stanicích B,N,E,V", cxxopts::value<std::vector<int>>()->default_value("136,136,230,50"))//https://www.blesk.cz/clanek/regiony-brno-brno-zpravy/682491/stovky-dobijecek-pro-elektromobily-v-brne-nasavat-tu-mohou-i-prespolni.html
         ("T,Tankovani", "Doba tankování (min) plné nádrže jednotlivých paliv B,N,E,V", cxxopts::value<std::vector<double>>()->default_value("2,2,20,1"))
         ("A,Auta","Počet aut různého typu paliva B,N,E,V", cxxopts::value<std::vector<int>>()->default_value("87500,17500,6125,1225"))
         ("N,Nadrz","Dojezd na jednu nádrž pro různé auta (střední hodnota, rozptyl) Bs,Br,Ns,Nr,Es,Er,Vs,Vr",cxxopts::value<std::vector<double>>()->default_value("482,50,1000,100,300,50,650,80"))

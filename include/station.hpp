@@ -15,9 +15,12 @@ private:
 
 class Station
 {
+    int number;
+    int placesCount[4] = {0,0,0,0};
 public:
     std::vector<StationPlace> places;
 
     void addPlaces(std::vector<int> placesCount);
-    Station() {}
+    void printPlacesInfo();
+    Station();
 };
