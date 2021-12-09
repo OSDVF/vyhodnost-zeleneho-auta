@@ -21,12 +21,17 @@ inline int operator&(FuelType a, FuelType b)
 
 void GoToStation(simlib3::Process *car, FuelType fuelTypes);
 
-class CitizenCar : public simlib3::Process
+class Car
 {
 public:
-static int carSerialNumberCounter;
+    static int carSerialNumberCounter;
     //should be set at start
-    int carSerialNumber;
+    int number;
+};
+
+class CitizenCar : public simlib3::Process, public Car
+{
+public:
     double fuel;
     double tankSize;
     FuelType fuelTypes;
@@ -41,10 +46,9 @@ static int carSerialNumberCounter;
     void Travel(double time, double distance);
 };
 
-class TravellerCar : public simlib3::Process
+class TravellerCar : public simlib3::Process, public Car
 {
 public:
-    int number;
     FuelType fuelTypes;
     void Create(FuelType fuelTypes);
     void Behavior();
@@ -56,7 +60,8 @@ public:
     FuelType fuelType;
     double period;
 
-    void Create(FuelType fuelType, double period){
+    void Create(FuelType fuelType, double period)
+    {
         this->fuelType = fuelType;
         this->period = period;
     }
