@@ -4,6 +4,7 @@
 #include "arguments.hpp"
 #include "car.hpp"
 #include "station.hpp"
+#include "statistics.hpp"
 
 unsigned int stdStr2intHash(std::string str, int h = 0);
 constexpr unsigned int str2intHash(const char *str, int h = 0)
@@ -28,10 +29,11 @@ int main(int argc, char *argv[])
     Arguments::dayMinutesLength = result["H"].as<double>();
     Arguments::kilometersToWork = result["V"].as<double>();
     Arguments::kilometersToStation = result["B"].as<double>();
-    auto workMinutes = result["R"].as<std::vector<double>>();
+    auto workMinutes = result["W"].as<std::vector<double>>();
     Arguments::workMinutesMean = workMinutes[0];
     Arguments::workMinutesDispersion = workMinutes[1];
-    Arguments::stationFill = result["D"].as<double>();
+    Arguments::stationFill = result["D"].as<std::vector<double>>();
+    Arguments::refuelTime = result["R"].as<double>();
     Arguments::tankingTimes = result["T"].as<std::vector<double>>();
     Arguments::nightChargeProbability = result["C"].as<double>();
     Arguments::stupidity = result["L"].as<decltype(Arguments::stupidity)>();
@@ -39,6 +41,13 @@ int main(int argc, char *argv[])
                                                                   {FuelType::Diesel, 1},
                                                                   {FuelType::Electric, 2},
                                                                   {FuelType::Hydrogen, 3}});
+    auto emissionRates = result["E"].as<std::vector<double>>();
+    Statistics::directEmissionForFuel[0] = emissionRates[0];
+    Statistics::directEmissionForFuel[1] = emissionRates[2];
+    Statistics::indirectEmissionForFuel[0] = emissionRates[1];
+    Statistics::indirectEmissionForFuel[1] = emissionRates[3];
+    Statistics::indirectEmissionForFuel[2] = emissionRates[4];
+    Statistics::indirectEmissionForFuel[3] = emissionRates[5];
 
     int totalStationCount = result["P"].as<int>();
     auto individialPlacesCount = result["Z"].as<std::vector<int>>();
@@ -114,10 +123,7 @@ int main(int argc, char *argv[])
     simlib3::Run();
     for (auto s : Arguments::stations)
     {
-        for (auto p : s.places)
-        {
-            p.getTankQueue()->Output();
-        }
+        s.printStatistics();
     }
     simlib3::SIMLIB_statistics.Output();
 }

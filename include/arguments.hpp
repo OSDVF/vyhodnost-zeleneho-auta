@@ -20,7 +20,8 @@ public:
     static double dayMinutesLength;
     static double workMinutesMean;
     static double workMinutesDispersion;
-    static double stationFill;
+    static std::vector<double> stationFill;
+    static double refuelTime;
     static double kilometersToWork;
     static double kilometersToStation;
     static double nightChargeProbability;

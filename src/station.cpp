@@ -71,6 +71,15 @@ void Station::printPlacesInfo()
     simlib3::Print("]\n");
 }
 
+void Station::printStatistics()
+{
+    Print("Stat #%d summary ༼ つ ◕_◕ ༽つ\n", number);
+    for (auto p : places)
+    {
+        p.getTankQueue()->Output();
+    }
+}
+
 int globalPlaceCounter = 0;
 StationPlace::StationPlace(FuelType fuelType)
 {
@@ -99,7 +108,7 @@ void RefuelStation::Behavior()
             p.getTankQueue()->Seize(this);
     }
     Print("Refilling station #%d\n", stationToRefuel.number);
-    Wait(30);
+    Wait(Arguments::refuelTime);
     Print("Station #%d refilled\n", stationToRefuel.number);
     for (auto p : stationToRefuel.places)
     {
@@ -116,9 +125,9 @@ void RefuelTheStationGenerator::Create(Station station)
 
 void RefuelTheStationGenerator::Behavior()
 {
-    auto nextRefill = Normal(1440*3, 1440);
+    auto nextRefill = Normal(Arguments::stationFill[0], Arguments::stationFill[1]);
     auto refuel = new RefuelStation();
     refuel->Create(stationToRefuel);
-    refuel->Activate();
+    refuel->Activate(Time + nextRefill);
     Activate(Time + nextRefill);
 }

@@ -1,6 +1,7 @@
 #include "car.hpp"
 #include "arguments.hpp"
 #include <unordered_map>
+#include "statistics.hpp"
 // Cars travel by 40km/h
 // I am speed
 #define SPEED 40
@@ -15,6 +16,7 @@ void CitizenCar::Travel(double time, double distance)
     Wait(time);
     _elapsedDayMinutes += time;
     this->fuel -= distance;
+    Statistics::emit(fuelTypes, distance);
 }
 
 void GoToStation(simlib3::Process *car, FuelType fuelTypes)
@@ -36,6 +38,15 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
         }
 
         auto places = Arguments::stations[randomStationIndex].places;
+        // Find last index of the place with this fuel type
+        std::size_t lastPlaceIndexWithThisFuel = 0;
+        for(std::size_t placeIndex = 0; placeIndex < places.size(); placeIndex++)
+        {
+            if(places[placeIndex].fuelType & fuelTypes)
+            {
+                lastPlaceIndexWithThisFuel = placeIndex;
+            }
+        }
         for (std::size_t placeIndex = 0; placeIndex < places.size(); placeIndex++)
         {
             auto place = places[placeIndex];
@@ -52,7 +63,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                         minFullness = queueLen;
                         minFullPlaceIndex = placeIndex;
                     }
-                    if (placeIndex == places.size() - 1)
+                    if (placeIndex >= lastPlaceIndexWithThisFuel)
                     {
                         // Stands into the shortest queue
                         dumbWaysToDie = false;
@@ -192,6 +203,7 @@ void Day::Behavior()
 {
     Print("^^^^^^^^^^^^^^^^^^^^^^^^^\n           Day %d        \n^^^^^^^^^^^^^^^^^^^^^^^^^\n", dayNumber);
     printf("Day %d\n", dayNumber);
+    Statistics::print();
 }
 
 void Day::Create(int dayCounter)

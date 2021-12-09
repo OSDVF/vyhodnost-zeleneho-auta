@@ -2,6 +2,7 @@ debug/
 build/
 *.o
 *.out-*
+*.out.*
 simlib/examples
 simlib/doc
 sim

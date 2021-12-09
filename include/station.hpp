@@ -23,6 +23,7 @@ public:
 
     void addPlaces(std::vector<int> placesCount);
     void printPlacesInfo();
+    void printStatistics();
     Station();
 };
 
