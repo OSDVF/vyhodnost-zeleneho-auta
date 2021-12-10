@@ -165,7 +165,12 @@ void CitizenCar::Behavior()
         Travel(timeToWork / 2, currentKilometers / 2);
 
         //Works
-        double workTime = simlib3::Normal(Arguments::workMinutesMean, Arguments::workMinutesDispersion);
+        double workTime;
+        do
+        {
+            workTime = simlib3::Normal(Arguments::workMinutesMean, Arguments::workMinutesDispersion);
+        } while (workTime<0);// Normal distribution can be even -inf
+        
         Print("Citizen #%d is working! It will take him %f minutes\n", number, workTime);
         Wait(workTime);
         this->_elapsedDayMinutes += workTime;

@@ -125,7 +125,12 @@ void RefuelTheStationGenerator::Create(Station station)
 
 void RefuelTheStationGenerator::Behavior()
 {
-    auto nextRefill = Normal(Arguments::stationFill[0], Arguments::stationFill[1]);
+    double nextRefill;
+    do
+    {
+        nextRefill = Normal(Arguments::stationFill[0], Arguments::stationFill[1]);
+    } while (nextRefill<0);
+    
     auto refuel = new RefuelStation();
     refuel->Create(stationToRefuel);
     refuel->Activate(Time + nextRefill);

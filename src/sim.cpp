@@ -93,7 +93,12 @@ int main(int argc, char *argv[])
     {
         for (int i = 0; i < carsCount[c]; i++)
         {
-            double tankSize = simlib3::Normal(tankSizes[c * 2], tankSizes[c * 2 + 1]);
+            double tankSize;
+            do
+            {
+                tankSize = simlib3::Normal(tankSizes[c * 2], tankSizes[c * 2 + 1]);
+            } while (tankSize<100);//This would be really bad and unrealistic
+            
             double generatedFuel = simlib3::Uniform(Arguments::controlLightLevel * tankSize, tankSize);
             auto newCar = new CitizenCar();
             newCar->Create(generatedFuel, tankSize, intToFuelType[c]);
