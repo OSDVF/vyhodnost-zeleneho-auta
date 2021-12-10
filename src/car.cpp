@@ -29,9 +29,9 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
     {
         int randomStationIndex = simlib3::Uniform(0, Arguments::stations.size());
         auto currentStation = Arguments::stations[randomStationIndex];
-        if(currentStation.isGettingRefueled)
+        if (currentStation.isGettingRefueled)
         {
-            if(!(stationsRefilling >= Arguments::stations.size()))
+            if (!(stationsRefilling >= Arguments::stations.size()))
             {
                 stationsRefilling++;
                 continue;
@@ -41,9 +41,9 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
         auto places = currentStation.places;
         // Find last index of the place with this fuel type
         std::size_t lastPlaceIndexWithThisFuel = 0;
-        for(std::size_t placeIndex = 0; placeIndex < places.size(); placeIndex++)
+        for (std::size_t placeIndex = 0; placeIndex < places.size(); placeIndex++)
         {
-            if(places[placeIndex].fuelType & fuelTypes)
+            if (places[placeIndex].fuelType & fuelTypes)
             {
                 lastPlaceIndexWithThisFuel = placeIndex;
             }
@@ -68,11 +68,13 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                     {
                         // Stands into the shortest queue
                         dumbWaysToDie = false;
-                        if(stationsRefilling == Arguments::stations.size())
+                        const char *carName = potentialCitizenCar == nullptr ? "Traveller" : "Citizen";
+                        Car *carAsCar = dynamic_cast<Car *>(car);
+                        if (stationsRefilling == Arguments::stations.size())
                         {
-                            Car* carAsCar = dynamic_cast<Car*>(car);
-                            Print("%s #%d is waiting because Stat #%d is refueling\n",potentialCitizenCar==nullptr?"Traveller":"Citizen", carAsCar->number, currentStation.number);
+                            Print("%s #%d is waiting because Stat #%d is refueling\n", carName, carAsCar->number, currentStation.number);
                         }
+                        Print("%s #%d is waiting at %s Place at Stat #%d with queue long %d\n", carName, carAsCar->number, intToFuelString[Arguments::fuelTypeToInt[place.fuelType]], randomStationIndex, queueLen);
                         places[minFullPlaceIndex].getTankQueue()->Seize(car);
                         if (potentialCitizenCar != nullptr)
                         {
@@ -120,8 +122,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                 }
             }
         }
-    }
-    while(dumbWaysToDie);
+    } while (dumbWaysToDie);
 }
 
 void CitizenCar::MaybeGoToStation()

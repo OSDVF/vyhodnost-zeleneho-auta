@@ -45,7 +45,7 @@ cxxopts::Options Arguments::setupArguments()
         ("E,Emise","Emise jednotlivých typů paliv v gramech CO2 kilomtr B přímé,B nepřímé,N přímé,N nepřímé,E nepřímé,V nepřímé", cxxopts::value<std::vector<double>>()->default_value("59.4,22.32,59.4,19.84,23.6,79.98"))
         ("B,VzdalenostStanice", "Vzdálenost na stanici", cxxopts::value<double>()->default_value("20"))
         ("Z,Zastavky","Celkový počet na všech stanicích B,N,E,V", cxxopts::value<std::vector<int>>()->default_value("14,14,23,5"))//https://www.blesk.cz/clanek/regiony-brno-brno-zpravy/682491/stovky-dobijecek-pro-elektromobily-v-brne-nasavat-tu-mohou-i-prespolni.html
-        ("T,Tankovani", "Doba tankování (min) plné nádrže jednotlivých paliv B,N,E,V", cxxopts::value<std::vector<double>>()->default_value("2,2,20,1"))
+        ("T,Tankovani", "Doba tankování (min) plné nádrže jednotlivých paliv B,N,E,V", cxxopts::value<std::vector<double>>()->default_value("15,15,60,4"))
         ("A,Auta","Počet aut různého typu paliva B,N,E,V", cxxopts::value<std::vector<int>>()->default_value("8750,7000,12250,7000"))
         ("N,Nadrz","Dojezd na jednu nádrž pro různé auta (střední hodnota, rozptyl) Bs,Br,Ns,Nr,Es,Er,Vs,Vr",cxxopts::value<std::vector<double>>()->default_value("482,50,1000,100,300,50,650,80"))
         ("D,Doplneni","Perioda doplňování paliva na pumpách (střední hodnota, rozptyl)",cxxopts::value<std::vector<double>>()->default_value("4320,1440"/*once a 3 days*/))
