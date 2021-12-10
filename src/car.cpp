@@ -152,17 +152,17 @@ void CitizenCar::Create(double fuel, double tankSize, FuelType fuelTypes)
 void CitizenCar::Behavior()
 {
     // It's the morning
-    double timeToWork = Arguments::kilometersToWork / (SPEED / 60.0f /*convert to km/m*/);
+    double currentKilometers = simlib3::Normal(Arguments::kilometersToWork,Arguments::kilometersToWorkDeviation);
+    double timeToWork =  currentKilometers / (SPEED / 60.0f /*convert to km/m*/);
     while (true)
     {
         Print("Citizen #%d is waking up with %f%% fuel!\n", number, (this->fuel / this->tankSize) * 100.0f);
         this->_elapsedDayMinutes = 0;
-        double randomTimeToWork = simlib3::Exponential(timeToWork);
-        Travel(randomTimeToWork / 2, Arguments::kilometersToWork / 2);
+        Travel(timeToWork / 2, currentKilometers / 2);
         // Now decide if we want to tank
         MaybeGoToStation();
-        Print("Citizen #%d is going to work! It will take him: %f minutes\n", number, randomTimeToWork / 2);
-        Travel(randomTimeToWork / 2, Arguments::kilometersToWork / 2);
+        Print("Citizen #%d is going to work! It will take him: %f minutes\n", number, timeToWork / 2);
+        Travel(timeToWork / 2, currentKilometers / 2);
 
         //Works
         double workTime = simlib3::Normal(Arguments::workMinutesMean, Arguments::workMinutesDispersion);
@@ -171,12 +171,11 @@ void CitizenCar::Behavior()
         this->_elapsedDayMinutes += workTime;
 
         // Reevaluate time from work to home
-        randomTimeToWork = simlib3::Exponential(timeToWork);
-        Travel(randomTimeToWork / 2, Arguments::kilometersToWork / 2);
+        Travel(timeToWork / 2, currentKilometers / 2);
         // Now decide if we want to tank
         MaybeGoToStation();
-        Print("Citizen #%d is going home! It will take him %f minutes\n", number, randomTimeToWork / 2);
-        Travel(randomTimeToWork / 2, Arguments::kilometersToWork / 2);
+        Print("Citizen #%d is going home! It will take him %f minutes\n", number, timeToWork / 2);
+        Travel(timeToWork / 2, currentKilometers / 2);
 
         if (this->fuelTypes & FuelType::Electric && simlib3::Uniform(0, 1) < Arguments::nightChargeProbability)
         {

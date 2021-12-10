@@ -7,8 +7,9 @@ double Arguments::workMinutesDispersion;
 std::vector<double> Arguments::stationFill;
 double Arguments::refuelTime;
 double Arguments::kilometersToWork;
+double Arguments::kilometersToWorkDeviation;
 double Arguments::nightChargeProbability;
-double Arguments::kilometersToStation;
+//double Arguments::kilometersToStation;
 double Arguments::stupidity;
 std::vector<Station> Arguments::stations;
 std::vector<double> Arguments::tankingTimes;
@@ -19,7 +20,7 @@ cxxopts::Options Arguments::setupArguments()
     cxxopts::Options options("Výhodnost zeleného auta", "Pokud chce EU splnit green deal v roce 2050, kolik bude třeba čerpacích a nabíjecích stanic pro jednotlivá paliva a jak moc se různé paliva ekonomicky vyplatí pro konkrétního jednotlivce, aby byl splněn limit emisí o 55% menších, než v roce 1990");
     options.add_options("Klasika")
         ("P,Pumpy", "Počet čerpacích stanic", cxxopts::value<int>()->default_value("7"))
-        ("V,Vzdalenost", "Vzdálenost do práce (km)", cxxopts::value<double>()->default_value("20"))
+        ("V,Vzdalenost", "Vzdálenost do práce (km) (střední hodnota, směrodatná odchylka)", cxxopts::value<std::vector<double>>()->default_value("15,10"))
         // https://www.eea.europa.eu/data-and-maps/daviz/co2-emission-intensity-9/#tab-googlechartid_googlechartid_googlechartid_googlechartid_chart_11111
         // 118 g of CO2e per kWh by electricity plants
         // https://www.virta.global/blog/ev-charging-101-how-much-electricity-does-an-electric-car-use
@@ -43,7 +44,7 @@ cxxopts::Options Arguments::setupArguments()
         // 8.6*9.3 = 79.98 g per 1 km
         // https://h2.live/en/fahren/
         ("E,Emise","Emise jednotlivých typů paliv v gramech CO2 kilomtr B přímé,B nepřímé,N přímé,N nepřímé,E nepřímé,V nepřímé", cxxopts::value<std::vector<double>>()->default_value("59.4,22.32,59.4,19.84,23.6,79.98"))
-        ("B,VzdalenostStanice", "Vzdálenost na stanici", cxxopts::value<double>()->default_value("20"))
+        //("B,VzdalenostStanice", "Vzdálenost na stanici", cxxopts::value<double>()->default_value("20"))
         ("Z,Zastavky","Celkový počet na všech stanicích B,N,E,V", cxxopts::value<std::vector<int>>()->default_value("14,14,23,5"))//https://www.blesk.cz/clanek/regiony-brno-brno-zpravy/682491/stovky-dobijecek-pro-elektromobily-v-brne-nasavat-tu-mohou-i-prespolni.html
         ("T,Tankovani", "Doba tankování (min) plné nádrže jednotlivých paliv B,N,E,V", cxxopts::value<std::vector<double>>()->default_value("15,15,60,4"))
         ("A,Auta","Počet aut různého typu paliva B,N,E,V", cxxopts::value<std::vector<int>>()->default_value("8750,7000,12250,7000"))

@@ -23,7 +23,8 @@ public:
     static std::vector<double> stationFill;
     static double refuelTime;
     static double kilometersToWork;
-    static double kilometersToStation;
+    static double kilometersToWorkDeviation;
+    //static double kilometersToStation;
     static double nightChargeProbability;
     static double stupidity;
     static std::vector<Station> stations;

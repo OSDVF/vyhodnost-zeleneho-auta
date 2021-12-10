@@ -27,8 +27,10 @@ int main(int argc, char *argv[])
     auto result = Arguments::setupArguments().parse(argc, argv);
     Arguments::controlLightLevel = result["K"].as<double>() / 100.0f;
     Arguments::dayMinutesLength = result["H"].as<double>();
-    Arguments::kilometersToWork = result["V"].as<double>();
-    Arguments::kilometersToStation = result["B"].as<double>();
+    auto kToW = result["V"].as<std::vector<double>>();
+    Arguments::kilometersToWork = kToW[0];
+    Arguments::kilometersToWorkDeviation = kToW[1];
+    //Arguments::kilometersToStation = result["B"].as<double>();
     auto workMinutes = result["W"].as<std::vector<double>>();
     Arguments::workMinutesMean = workMinutes[0];
     Arguments::workMinutesDispersion = workMinutes[1];
