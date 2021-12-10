@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
         Arguments::stations[i].printPlacesInfo();
     }
 
-    auto carsCount = result["A"].as<std::vector<int>>();
+    auto carsCount = Arguments::carsCount = result["A"].as<std::vector<int>>();
     auto tankSizes = result["N"].as<std::vector<double>>();
 
     //simlib3::DebugON();
@@ -99,17 +99,15 @@ int main(int argc, char *argv[])
             newCar->Create(generatedFuel, tankSize, intToFuelType[c]);
             cars.push_back(newCar);
             newCar->Activate();
+            Arguments::totalCars++;
         }
     }
-
-    auto tripPeriods = result["Y"].as<std::vector<double>>();
-    for (int i = 0; i < 4; i++)
-    {
-        auto gen = new TravellerCarGenerator;
-        gen->Create(intToFuelType[i], tripPeriods[i]);
-        gen->Activate();
-    }
     simlib3::Print("Generated %d cars.\n", cars.size());
+
+    auto travellersPerMinute = result["Y"].as<double>();
+    auto gen = new TravellerCarGenerator;
+    gen->Create(travellersPerMinute);
+    gen->Activate();
 
     auto dayCounterGen = new DayGenerator;
     dayCounterGen->Create();

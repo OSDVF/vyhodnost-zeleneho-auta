@@ -57,13 +57,11 @@ public:
 class TravellerCarGenerator : public simlib3::Event
 {
 public:
-    FuelType fuelType;
-    double period;
+    double travellersPerMinute;
 
-    void Create(FuelType fuelType, double period)
+    void Create(double travellersPerMinute)
     {
-        this->fuelType = fuelType;
-        this->period = period;
+        this->travellersPerMinute = travellersPerMinute;
     }
     void Behavior();
 };

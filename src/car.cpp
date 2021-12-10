@@ -152,7 +152,7 @@ void CitizenCar::Create(double fuel, double tankSize, FuelType fuelTypes)
 void CitizenCar::Behavior()
 {
     // It's the morning
-    double currentKilometers = simlib3::Normal(Arguments::kilometersToWork,Arguments::kilometersToWorkDeviation);
+    double currentKilometers = simlib3::Uniform(Arguments::kilometersToWork - Arguments::kilometersToWorkDeviation, Arguments::kilometersToWork + Arguments::kilometersToWorkDeviation );
     double timeToWork =  currentKilometers / (SPEED / 60.0f /*convert to km/m*/);
     while (true)
     {
@@ -199,10 +199,31 @@ void TravellerCar::Behavior()
 void TravellerCarGenerator::Behavior()
 {
     auto car = new TravellerCar();
-    car->Create(fuelType);
+    
+    double fuelTypeProbability = Uniform(0,Arguments::totalCars);
+
+    FuelType choosedFuelType;
+    if(fuelTypeProbability < Arguments::carsCount[0])
+    {
+        choosedFuelType = intToFuelType[0];
+    }
+    else if(fuelTypeProbability < Arguments::carsCount[0] + Arguments::carsCount[1])
+    {
+        choosedFuelType = intToFuelType[1];
+    }
+    else if(fuelTypeProbability < Arguments::carsCount[0] + Arguments::carsCount[1] + Arguments::carsCount[2])
+    {
+        choosedFuelType = intToFuelType[2];
+    }
+    else
+    {
+        choosedFuelType = intToFuelType[3];
+    }
+
+    car->Create(choosedFuelType);
     car->Activate();
-    Print("Traveller #%d powered by %s has arrived!\n", car->number, intToFuelString[Arguments::fuelTypeToInt[fuelType]]);
-    Activate(Time + Exponential(period));
+    Print("Traveller #%d powered by %s has arrived!\n", car->number, intToFuelString[Arguments::fuelTypeToInt[choosedFuelType]]);
+    Activate(Time + Poisson(travellersPerMinute));
 }
 
 void Day::Behavior()

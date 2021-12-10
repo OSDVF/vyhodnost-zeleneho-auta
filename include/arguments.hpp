@@ -27,6 +27,8 @@ public:
     //static double kilometersToStation;
     static double nightChargeProbability;
     static double stupidity;
+    static int totalCars;
+    static std::vector<int> carsCount;
     static std::vector<Station> stations;
     static std::vector<double> tankingTimes;
     static std::unordered_map<FuelType, int> fuelTypeToInt;
