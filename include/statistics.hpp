@@ -20,4 +20,6 @@ public:
 
     static void emit(FuelType fuel, double km);
     static void print();
+
+    static simlib3::Histogram queueLengthForFuel[4];
 };
