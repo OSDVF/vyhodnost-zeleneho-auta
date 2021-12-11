@@ -25,8 +25,10 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
     //Find a fueling place for ourselves
     long unsigned int stationsRefilling = 0;
     bool dumbWaysToDie = true;
+    bool stupidlyLongQue = false;
     do
     {
+        stupidlyLongQue = false;
         int randomStationIndex = simlib3::Uniform(0, Arguments::stations.size());
         auto currentStation = Arguments::stations[randomStationIndex];
         if (currentStation.isGettingRefueled)
@@ -66,6 +68,12 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                     }
                     if (placeIndex >= lastPlaceIndexWithThisFuel)
                     {
+                        if(minFullness > 20)
+                        {
+                            stupidlyLongQue = true;
+                            printf("Stupidly long queue\n");
+                            break;
+                        }
                         // Stands into the shortest queue
                         dumbWaysToDie = false;
                         const char *carName = potentialCitizenCar == nullptr ? "Traveller" : "Citizen";
@@ -122,7 +130,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                 }
             }
         }
-    } while (dumbWaysToDie);
+    } while (dumbWaysToDie || stupidlyLongQue);
 }
 
 void CitizenCar::MaybeGoToStation()
