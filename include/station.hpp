@@ -2,6 +2,8 @@
 #include "simlib.h"
 #include "car.hpp"
 #include <vector>
+#include <array>
+
 struct StationPlace
 {
 public:
@@ -17,6 +19,7 @@ class Station
 {
     int placesCount[4] = {0,0,0,0};
 public:
+    int thisDayCustomers = 0;
     int number;
     bool isGettingRefueled;
     std::vector<StationPlace> places;
@@ -24,6 +27,7 @@ public:
     void addPlaces(std::vector<int> placesCount);
     void printPlacesInfo();
     void printStatistics();
+    std::array<int, 4> queueLengthsByFuel();
     Station();
 };
 

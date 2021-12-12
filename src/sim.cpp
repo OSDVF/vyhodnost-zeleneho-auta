@@ -97,11 +97,19 @@ int main(int argc, char *argv[])
             do
             {
                 tankSize = simlib3::Normal(tankSizes[c * 2], tankSizes[c * 2 + 1]);
-            } while (tankSize<100);//This would be really bad and unrealistic
-            
-            double generatedFuel = simlib3::Uniform(Arguments::controlLightLevel * tankSize, tankSize);
+            } while (tankSize < 100); //This would be really bad and unrealistic
+            auto fuelType = intToFuelType[c];
+            double generatedFuel;
+            if (fuelType == FuelType::Electric && simlib3::Uniform(0, 1) < Arguments::nightChargeProbability)
+            {
+                generatedFuel = tankSize;//Charge electric vehicles to 100% by default if they did not forget to charge by night
+            }
+            else
+            {
+                generatedFuel = simlib3::Uniform(Arguments::controlLightLevel * tankSize, tankSize);
+            }
             auto newCar = new CitizenCar();
-            newCar->Create(generatedFuel, tankSize, intToFuelType[c]);
+            newCar->Create(generatedFuel, tankSize, fuelType);
             cars.push_back(newCar);
             newCar->Activate();
             Arguments::totalCars++;
@@ -109,10 +117,13 @@ int main(int argc, char *argv[])
     }
     simlib3::Print("Generated %d cars.\n", cars.size());
 
-    auto travellersPerMinute = result["Y"].as<double>();
-    auto gen = new TravellerCarGenerator;
-    gen->Create(travellersPerMinute);
-    gen->Activate();
+    auto period = result["Y"].as<double>();
+    if (period != 0)
+    {
+        auto gen = new TravellerCarGenerator;
+        gen->Create(period);
+        gen->Activate();
+    }
 
     auto dayCounterGen = new DayGenerator;
     dayCounterGen->Create();

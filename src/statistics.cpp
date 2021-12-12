@@ -7,6 +7,8 @@ double Statistics::indirectEmissions[4];
 
 double Statistics::directEmissionForFuel[4];
 double Statistics::indirectEmissionForFuel[4];
+simlib3::Stat Statistics::numberOfStationCustomersPerDay;
+
 simlib3::Histogram Statistics::queueLengthForFuel[4] {
     simlib3::Histogram("Petrol Queues Length",0,1,100),
     simlib3::Histogram("Diesel Queues Length",0,1,100),
@@ -33,6 +35,9 @@ void Statistics::print()
     }
     simlib3::Print("Total direct: %f\nTotal indirect: %f\n", totalDirect, totalIndirect);
     simlib3::Print("TOTAL: %f\n", totalDirect + totalIndirect);
+
+    simlib3::Print("Customers per day:");
+    numberOfStationCustomersPerDay.Output();
 
     for(int i = 0;i<4;i++)
     {

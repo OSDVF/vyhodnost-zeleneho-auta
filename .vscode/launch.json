@@ -12,6 +12,11 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
+            "args": [
+                "-Y",
+                "0",
+                "--Zastavky=42,42,40,1"
+            ],
             "externalConsole": false,
             "MIMode": "gdb",
             "preLaunchTask": "Debug Build",

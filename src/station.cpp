@@ -3,7 +3,7 @@
 
 void Station::addPlaces(std::vector<int> placesCount)
 {
-    for(int i = 0;i<4;i++)
+    for (int i = 0; i < 4; i++)
     {
         this->placesCount[i] += placesCount[i];
     }
@@ -64,9 +64,9 @@ Station::Station()
 void Station::printPlacesInfo()
 {
     simlib3::Print("Stat #%d has %d places [", number, places.size());
-    for(int i = 0;i<4;i++)
+    for (int i = 0; i < 4; i++)
     {
-        simlib3::Print("%s:%d ", intToFuelString[i],this->placesCount[i]);
+        simlib3::Print("%s:%d ", intToFuelString[i], this->placesCount[i]);
     }
     simlib3::Print("]\n");
 }
@@ -78,6 +78,16 @@ void Station::printStatistics()
     {
         p.getTankQueue()->Output();
     }
+}
+
+std::array<int, 4> Station::queueLengthsByFuel()
+{
+    std::array<int, 4> retVal({0, 0, 0, 0});
+    for (auto p : places)
+    {
+        retVal[Arguments::fuelTypeToInt[p.fuelType]] += p.getTankQueue()->QueueLen();
+    }
+    return retVal;
 }
 
 int globalPlaceCounter = 0;
@@ -104,7 +114,7 @@ void RefuelStation::Behavior()
     stationToRefuel.isGettingRefueled = true;
     for (auto p : stationToRefuel.places)
     {
-        if(p.fuelType != FuelType::Electric)
+        if (p.fuelType != FuelType::Electric)
             p.getTankQueue()->Seize(this);
     }
     Print("Refilling station #%d\n", stationToRefuel.number);
@@ -112,7 +122,7 @@ void RefuelStation::Behavior()
     Print("Station #%d refilled\n", stationToRefuel.number);
     for (auto p : stationToRefuel.places)
     {
-        if(p.fuelType != FuelType::Electric)
+        if (p.fuelType != FuelType::Electric)
             p.getTankQueue()->Release(this);
     }
     stationToRefuel.isGettingRefueled = false;
@@ -129,8 +139,8 @@ void RefuelTheStationGenerator::Behavior()
     do
     {
         nextRefill = Normal(Arguments::stationFill[0], Arguments::stationFill[1]);
-    } while (nextRefill<0);
-    
+    } while (nextRefill < 0);
+
     auto refuel = new RefuelStation();
     refuel->Create(stationToRefuel);
     refuel->Activate(Time + nextRefill);
