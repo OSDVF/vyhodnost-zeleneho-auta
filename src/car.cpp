@@ -12,6 +12,7 @@ using simlib3::Print;
 const int TRAVELINGTHROUGHCITY = 30;
 
 int Car::carSerialNumberCounter = 0;
+int givenUps[4] = {0,0,0,0};
 void CitizenCar::Travel(double time, double distance)
 {
     Wait(time);
@@ -26,11 +27,12 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
     long unsigned int stationsRefilling = 0;
     bool dumbWaysToDie = true;
     bool stupidlyLongQue = false;
+    int guard = 0;
     do
     {
         stupidlyLongQue = false;
         int randomStationIndex = simlib3::Uniform(0, Arguments::stations.size());
-        auto& currentStation = Arguments::stations[randomStationIndex];
+        auto &currentStation = Arguments::stations[randomStationIndex];
         if (currentStation.isGettingRefueled)
         {
             if (!(stationsRefilling >= Arguments::stations.size()))
@@ -52,6 +54,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
         }
         std::size_t minFullness = places[0].getTankQueue()->QueueLen();
         int minFullPlaceIndex = 0;
+        Car *carAsCar = dynamic_cast<Car *>(car);
         for (std::size_t placeIndex = 0; placeIndex < places.size(); placeIndex++)
         {
             auto place = places[placeIndex];
@@ -68,7 +71,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                     }
                     if (placeIndex >= lastPlaceIndexWithThisFuel)
                     {
-                        if (minFullness > 20)
+                        if (minFullness > 10)
                         {
                             stupidlyLongQue = true;
                             printf("Stupidly long queue\n");
@@ -79,7 +82,6 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                         dumbWaysToDie = false;
                         currentStation.thisDayCustomers++;
                         const char *carName = potentialCitizenCar == nullptr ? "Traveller" : "Citizen";
-                        Car *carAsCar = dynamic_cast<Car *>(car);
                         if (stationsRefilling == Arguments::stations.size())
                         {
                             Print("%s #%d is waiting because Stat #%d is refueling\n", carName, carAsCar->number, currentStation.number);
@@ -89,7 +91,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                         if (potentialCitizenCar != nullptr)
                         {
                             auto time = Arguments::tankingTimes[Arguments::fuelTypeToInt[potentialCitizenCar->fuelTypes]];
-                            Print("Citizen #%d is fueling up at shortest queue! (after %d days) It will take him %f minutes\n", potentialCitizenCar->number, potentialCitizenCar->daysSinceLastRefuel, time);
+                            Print("[%f] Citizen #%d is fueling up at shortest queue! (after %d days) It will take him %f minutes\n", Time, potentialCitizenCar->number, potentialCitizenCar->daysSinceLastRefuel, time);
                             potentialCitizenCar->Wait(time);
                             potentialCitizenCar->daysSinceLastRefuel = 0;
                             potentialCitizenCar->_elapsedDayMinutes += time;
@@ -99,7 +101,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                         {
                             auto travellerCar = dynamic_cast<TravellerCar *>(car);
                             auto someTime = Arguments::tankingTimes[Arguments::fuelTypeToInt[travellerCar->fuelTypes]];
-                            Print("Traveller #%d is fueling up at shortest queue! It will take him %f minutes\n", travellerCar->number, someTime);
+                            Print("[%f] Traveller #%d is fueling up at shortest queue! It will take him %f minutes\n", Time, travellerCar->number, someTime);
                             travellerCar->Wait(someTime);
                         }
                         places[minFullPlaceIndex].getTankQueue()->Release(car);
@@ -116,7 +118,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                     if (potentialCitizenCar != nullptr)
                     {
                         auto time = Arguments::tankingTimes[Arguments::fuelTypeToInt[potentialCitizenCar->fuelTypes]];
-                        Print("Citizen #%d is fueling up! (after %d days) It will take him %f minutes\n", potentialCitizenCar->number, potentialCitizenCar->daysSinceLastRefuel, time);
+                        Print("[%f] Citizen #%d is fueling up! (after %d days) It will take him %f minutes\n", Time, potentialCitizenCar->number, potentialCitizenCar->daysSinceLastRefuel, time);
                         potentialCitizenCar->Wait(time);
                         potentialCitizenCar->daysSinceLastRefuel = 0;
                         potentialCitizenCar->_elapsedDayMinutes += time;
@@ -126,7 +128,7 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                     {
                         auto travellerCar = dynamic_cast<TravellerCar *>(car);
                         auto someTime = Arguments::tankingTimes[Arguments::fuelTypeToInt[travellerCar->fuelTypes]];
-                        Print("Traveller #%d is fueling up! It will take him %f minutes\n", travellerCar->number, someTime);
+                        Print("[%f] Traveller #%d is fueling up! It will take him %f minutes\n", Time, travellerCar->number, someTime);
                         travellerCar->Wait(someTime);
                     }
                     place.getTankQueue()->Release(car);
@@ -134,7 +136,17 @@ void GoToStation(simlib3::Process *car, FuelType fuelTypes)
                 }
             }
         }
-    } while (dumbWaysToDie || stupidlyLongQue);
+        if (stupidlyLongQue)
+        {
+            guard++;
+        }
+        if(guard >= (int)Arguments::stations.size() * 2)
+        {
+            Print("[%f] Citizen #%d given up!\n",Time, carAsCar->number);
+            givenUps[Arguments::fuelTypeToInt[fuelTypes]]++;
+            break;
+        }
+    } while (dumbWaysToDie);
 }
 
 void CitizenCar::MaybeGoToStation()
@@ -166,10 +178,12 @@ void CitizenCar::Behavior()
     // It's the morning
     double currentKilometers = simlib3::Uniform(Arguments::kilometersToWork - Arguments::kilometersToWorkDeviation, Arguments::kilometersToWork + Arguments::kilometersToWorkDeviation);
     double timeToWork = currentKilometers / (SPEED / 60.0f /*convert to km/m*/);
+    double workHourStart = simlib3::Uniform(0, Arguments::differenceBetweenWorkBegin);
     while (true)
     {
-        Print("Citizen #%d is waking up with %f%% fuel!\n", number, (this->fuel / this->tankSize) * 100.0f);
-        this->_elapsedDayMinutes = 0;
+        Print("Citizen #%d woke up with %f%% fuel!\n", number, (this->fuel / this->tankSize) * 100.0f);
+        Wait(workHourStart);
+        this->_elapsedDayMinutes = workHourStart;
         Travel(timeToWork / 2, currentKilometers / 2);
         // Now decide if we want to tank
         MaybeGoToStation();
@@ -249,13 +263,20 @@ void TravellerCarGenerator::Behavior()
 
 void Day::Behavior()
 {
-    for (auto& station : Arguments::stations)
+    for (auto &station : Arguments::stations)
     {
         Statistics::numberOfStationCustomersPerDay(station.thisDayCustomers);
         station.thisDayCustomers = 0;
     }
+    for (int i = 0; i < 4; i++)
+    {
+        Statistics::givenUpCars[i](givenUps[i]);
+        givenUps[i] = 0;
+    }
+
     Statistics::print();
     Print("^^^^^^^^^^^^^^^^^^^^^^^^^\n           Day %d        \n^^^^^^^^^^^^^^^^^^^^^^^^^\n", dayNumber);
+    printf("Day %d\n", dayNumber);
 }
 
 void Day::Create(int dayCounter)

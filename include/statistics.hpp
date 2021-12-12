@@ -16,6 +16,7 @@ public:
     static double directEmissionForFuel[4];
     static double indirectEmissionForFuel[4];
     static simlib3::Stat numberOfStationCustomersPerDay;
+    static simlib3::Stat givenUpCars[4];
 
     static void emit(FuelType fuel, double km);
     static void print();

@@ -13,9 +13,14 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "args": [
+                "-F",
+                "output.txt",
                 "-Y",
                 "0",
-                "--Zastavky=42,42,40,1"
+                "--Zastavky=56,42,40,1",
+                "-C",
+                "0.8",
+                "--Minuty=20160"
             ],
             "externalConsole": false,
             "MIMode": "gdb",

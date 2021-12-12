@@ -1,6 +1,7 @@
 #include <simlib.h>
 #include <iostream>
 #include <vector>
+#include <string>
 #include "arguments.hpp"
 #include "car.hpp"
 #include "station.hpp"
@@ -26,7 +27,7 @@ int main(int argc, char *argv[])
 
     auto result = Arguments::setupArguments().parse(argc, argv);
     Arguments::controlLightLevel = result["K"].as<double>() / 100.0f;
-    Arguments::dayMinutesLength = result["H"].as<double>();
+    Arguments::dayMinutesLength = result["P"].as<double>();
     auto kToW = result["V"].as<std::vector<double>>();
     Arguments::kilometersToWork = kToW[0];
     Arguments::kilometersToWorkDeviation = kToW[1];
@@ -43,6 +44,7 @@ int main(int argc, char *argv[])
                                                                   {FuelType::Diesel, 1},
                                                                   {FuelType::Electric, 2},
                                                                   {FuelType::Hydrogen, 3}});
+    Arguments::differenceBetweenWorkBegin = result["H"].as<double>();
     auto emissionRates = result["E"].as<std::vector<double>>();
     Statistics::directEmissionForFuel[0] = emissionRates[0];
     Statistics::directEmissionForFuel[1] = emissionRates[2];
@@ -51,7 +53,9 @@ int main(int argc, char *argv[])
     Statistics::indirectEmissionForFuel[2] = emissionRates[4];
     Statistics::indirectEmissionForFuel[3] = emissionRates[5];
 
-    int totalStationCount = result["P"].as<int>();
+    std::string fileName = result["F"].as<std::string>();
+
+    int totalStationCount = result["S"].as<int>();
     auto individialPlacesCount = result["Z"].as<std::vector<int>>();
     int totalPlacesCount = 0;
     Arguments::stations = std::vector<Station>(totalStationCount);
@@ -86,6 +90,10 @@ int main(int argc, char *argv[])
     auto tankSizes = result["N"].as<std::vector<double>>();
 
     //simlib3::DebugON();
+    if (fileName.length() > 0)
+    {
+        simlib3::SetOutput(fileName.c_str());
+    }
     simlib3::Init(0, result["M"].as<double>());
 
     std::vector<CitizenCar *> cars;
@@ -102,7 +110,7 @@ int main(int argc, char *argv[])
             double generatedFuel;
             if (fuelType == FuelType::Electric && simlib3::Uniform(0, 1) < Arguments::nightChargeProbability)
             {
-                generatedFuel = tankSize;//Charge electric vehicles to 100% by default if they did not forget to charge by night
+                generatedFuel = tankSize; //Charge electric vehicles to 100% by default if they did not forget to charge by night
             }
             else
             {

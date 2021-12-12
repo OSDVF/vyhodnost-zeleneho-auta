@@ -10,6 +10,7 @@ double Arguments::kilometersToWork;
 double Arguments::kilometersToWorkDeviation;
 double Arguments::nightChargeProbability;
 //double Arguments::kilometersToStation;
+double Arguments::differenceBetweenWorkBegin;
 double Arguments::stupidity;
 std::vector<Station> Arguments::stations;
 std::vector<double> Arguments::tankingTimes;
@@ -21,7 +22,9 @@ cxxopts::Options Arguments::setupArguments()
 {
     cxxopts::Options options("Výhodnost zeleného auta", "Pokud chce EU splnit green deal v roce 2050, kolik bude třeba čerpacích a nabíjecích stanic pro jednotlivá paliva a jak moc se různé paliva ekonomicky vyplatí pro konkrétního jednotlivce, aby byl splněn limit emisí o 55% menších, než v roce 1990");
     options.add_options("Klasika")
-        ("P,Pumpy", "Počet čerpacích stanic", cxxopts::value<int>()->default_value("7"))
+        ("F,File","Kam zapsat výsledek simulace", cxxopts::value<std::string>()->default_value(""))
+        ("S,Stanice", "Počet čerpacích stanic", cxxopts::value<int>()->default_value("7"))
+        ("H,RozdilHodin","Rozdíl, mezi začátky pracovních hodin (v minutách)",cxxopts::value<double>()->default_value("240"))
         ("V,Vzdalenost", "Vzdálenost do práce (km) (střední hodnota, směrodatná odchylka)", cxxopts::value<std::vector<double>>()->default_value("15,5"))
         // https://www.eea.europa.eu/data-and-maps/daviz/co2-emission-intensity-9/#tab-googlechartid_googlechartid_googlechartid_googlechartid_chart_11111
         // 118 g of CO2e per kWh by electricity plants
@@ -52,14 +55,14 @@ cxxopts::Options Arguments::setupArguments()
         ("A,Auta","Počet aut různého typu paliva B,N,E,V", cxxopts::value<std::vector<int>>()->default_value("15307,4500,9373,819"))
         ("N,Nadrz","Dojezd na jednu nádrž pro různé auta (střední hodnota, rozptyl) Bs,Br,Ns,Nr,Es,Er,Vs,Vr",cxxopts::value<std::vector<double>>()->default_value("482,50,1000,100,300,50,650,80"))
         ("D,Doplneni","Perioda doplňování paliva na pumpách (střední hodnota, rozptyl)",cxxopts::value<std::vector<double>>()->default_value("4320,1440"/*once a 3 days*/))
-        ("Y,Vylet","Perioda generování výletníků (0 znamená že se nebudou generovat)",cxxopts::value<double>()->default_value("2.08698"))
+        ("Y,Vylet","Perioda generování výletníků (0 znamená že se nebudou generovat)",cxxopts::value<double>()->default_value("2,7533"))
         ("M,Minuty","Doba běhu simulace", cxxopts::value<double>()->default_value("10080"/* week */));
     options.add_options("Pokročilé")
         ("R,RefuelTime","Přesná doba poteřbná na doplnění paliva z příchozí cisterny (min)", cxxopts::value<double>()->default_value("30"))
         ("L,Blbost", "Pravděpodobnost, že je člověk vlastnící elektromobil jej nikdy nebude nabíjet doma", cxxopts::value<double>()->default_value("0.0"))
         ("C,Pravdepodobnost","Pravděpodobnost, že člověk dá svůj elektromobil nabít přes noc", cxxopts::value<double>()->default_value("0.8"))
         ("K,Kontrolka","Kdy se rozsvítí kontrolka, že by auto mělo jet tankovat (% zbylého paliva v nádrži)", cxxopts::value<double>()->default_value("10"))
-        ("H,Den","Délka dne v minutách", cxxopts::value<double>()->default_value("1440"))
+        ("P,Den","Délka dne v minutách", cxxopts::value<double>()->default_value("1440"))
         ("W,Work","pRacovní doba v minutách (střední hodnota, směrodatná odchylka)", cxxopts::value<std::vector<double>>()->default_value("480,60"));
     return options;
 }

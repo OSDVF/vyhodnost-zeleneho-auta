@@ -25,6 +25,7 @@ public:
     static double kilometersToWork;
     static double kilometersToWorkDeviation;
     //static double kilometersToStation;
+    static double differenceBetweenWorkBegin;
     static double nightChargeProbability;
     static double stupidity;
     static int totalCars;
